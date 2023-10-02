@@ -1,0 +1,141 @@
+---
+title: "STAT570 - Lecture1"
+author: "Fulya Gokalp Yavuz"
+format: html
+editor: visual
+---
+
+For this lecture, you need:
+
+-   R version \>= 4.2.0
+
+-   RStudio \>= 2023.03.1
+
+### **Install R**
+
+Download and install R for your operating system from <https://cloud.r-project.org/>.
+
+### **Install R Studio**
+
+Download and install RStudio Desktop from <https://posit.co/download/rstudio-desktop/>. This page should automatically offer you the version suitable for your operating system, but you can scroll down to find versions for all operating systems.
+
+# Github Account
+
+Register a GitHub account at [github.com](https://github.com/).
+
+## **Check link between R and GitHub**
+
+Configure your `user.name` and `user.email` for git in RStudio with:
+
+``` r
+usethis::use_git_config(
+  user.name = "Charlie Brown",          # actual first and last name
+  user.email = "brown@example.com"  # email associated with GitHub account
+  )
+```
+
+```         
+```
+
+Communicating with GitHub requires authentication with your GitHub account. This is achieved by creating and securely storing a Personal Access Token (PAT). The [Managing Git(Hub) Credentials](https://usethis.r-lib.org/articles/articles/git-credentials.html) vignette in the **`usethis`** ([Wickham et al. 2023](https://posit-conf-2023.github.io/pkg-dev/setup.html#ref-usethis)) package has details on using PATs, but for now the following should suffice.
+
+Make sure you are connected to the GitHub Account from R. Before going to use_github(), we have to take the token by typing:
+
+```{r, eval=FALSE}
+usethis::create_github_token()
+```
+
+Write something to the decsription. Take the token from there and type in
+
+```{r, eval=FALSE}
+console:gitcreds::gitcreds_set()
+```
+
+Paste the token there and we are good to go.
+
+Highly recommended book [Happy Git with R](https://happygitwithr.com/) for advice on setting up and using Git with R ([Bryan and Hester, n.d.](https://posit-conf-2023.github.io/pkg-dev/setup.html#ref-bryan)).
+
+## Regular Expressions\*
+
+> Some people, when confronted with a problem, think: "I know, I'll use regular expressions." Now they have two problems. --- Jamie Zawinski.
+
+## Literal characters
+
+Detect if each of the following strings in the character vector `animals` contains the letter \"j.\":
+
+```{r}
+library(stringr)
+
+animals <- c("jaguar", "jay", "bat")
+str_detect(animals, "j")
+```
+
+*Extract* the match with `str_extract`
+
+```{r}
+str_extract(animals, "j")
+```
+
+*Locate* the position of a match using `str_locate`.
+
+```{r}
+str_locate(animals, "j")
+```
+
+Match multiple characters in a row:
+
+```{r}
+animals <- c("jaguar", "jay", "bat")
+str_detect(animals, "jag")
+```
+
+characters are case sensitive:
+
+```{r}
+wows <- c("wow", "WoW", "WOW")
+str_detect(wows, "wow")
+```
+
+Check out Meta characters from: <https://smltar.com/regexp#meta-characters>
+
+## **Full stop, the wildcard**
+
+"Let\'s start with the full stop/period/dot, which acts as a \"wildcard.\" This means that this character will match anything in place other then a newline character."
+
+```{r}
+strings <- c("cat", "cut", "cue")
+str_extract(strings, "c.")
+str_extract(strings, "c.t")
+```
+
+"**Character classes**
+
+So far we have only been able to match either exact characters or wildcards. **Character classes** (also called character sets) let us do more than that. A character class allows us to match a character specified inside the class. A character class is constructed with square brackets. The character class `[ac]` will match *either* an \"a\" or a \"c.\" "
+
+```{r}
+strings <- c("a", "b", "c", " ")
+str_detect(strings, "[ac]")
+str_detect(strings, "[a c]")
+```
+
+A hyphen character to define a range of characters. Thus `[1-5]` is the same as `[12345]`
+
+```{r}
+numbers <- c("1", "2", "3", "4", "5", "6", "7", "8", "9")
+str_detect(numbers, "[2-7]")
+```
+
+"We can also negate characters in a class with a caret `^`. Placing a caret immediately inside the opening square bracket will make the regular expression match anything *not* inside the class. Thus the regular expression `[^ac]` will match anything that isn\'t the letter \"a\" or \"c.\""
+
+```{r}
+strings <- c("a", "b", "c")
+str_detect(strings, "[^ac]")
+```
+
+Check out shorthand character classes: <https://smltar.com/regexp#shorthand-character-classes>
+
+## References:
+
+<https://posit-conf-2023.github.io/pkg-dev/setup.html#install-r-package-development-tools>
+
+\*Hvitfeldt, E. & Silge, J. (2022). Supervised Machine Learning for Text Analysis in R. CRC Press, FL. <https://smltar.com>
